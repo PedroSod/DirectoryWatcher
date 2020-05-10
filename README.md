@@ -1,2 +1,2 @@
 # TesteNTConsult
-Teste NTConsult
+-Leitor de arquivos txt separados por "ç"
