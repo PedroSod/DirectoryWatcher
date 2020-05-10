@@ -24,9 +24,9 @@ public class ObservadorDeDiretorioDeEntrada implements ObservadorDeDiretorio {
 
 			WatchService inPathWatcher = FileSystems.getDefault().newWatchService();
 			Path inPath = Paths.get(System.getenv("HOMEPATH") + filePath);
-			processExistingFiles(inPath);
+			processarArquivosExistentes(inPath);
 			inPath.register(inPathWatcher, StandardWatchEventKinds.ENTRY_CREATE);
-			watching(inPathWatcher,inPath);
+			observa(inPathWatcher,inPath);
 
 		} catch (IOException e) {
 			System.out.println(String.format("Erro no monitoramento de entrada dos dados: %s", e.getMessage()));
@@ -35,20 +35,20 @@ public class ObservadorDeDiretorioDeEntrada implements ObservadorDeDiretorio {
 		}
 	}
 
-	public void watching( WatchService inPathWatcher,Path inPath) throws InterruptedException {
+	public void observa(WatchService inPathWatcher, Path inPath) throws InterruptedException {
 		WatchKey inPathWatchkey;
 		while ((inPathWatchkey = inPathWatcher.take()) != null) {
 			for (WatchEvent<?> event : inPathWatchkey.pollEvents()) {
 				if (event.context() instanceof Path) {
 					Path fileFullPath = inPath.resolve((Path) event.context());
-					processFile(fileFullPath);
+					processaArquivo(fileFullPath);
 				}
 			}
 			inPathWatchkey.reset();
 		}
 	}
 
-	private void processFile(Path fileFullPath) {
+	private void processaArquivo(Path fileFullPath) {
 		ProcessadorDeArquivo processadorDeArquivo = ProcessadorDeArquivoIni.getFileProcessor(fileFullPath);
 
 		if (processadorDeArquivo != null) {
@@ -57,10 +57,10 @@ public class ObservadorDeDiretorioDeEntrada implements ObservadorDeDiretorio {
 		}
 	}
 
-	private void processExistingFiles(Path inPath) {
+	private void processarArquivosExistentes(Path inPath) {
 		if (inPath.toFile() != null && inPath.toFile().exists()) {
 			for (File file : inPath.toFile().listFiles()) {
-				processFile(Paths.get(file.getAbsolutePath()));
+				processaArquivo(Paths.get(file.getAbsolutePath()));
 			}
 		}
 	}

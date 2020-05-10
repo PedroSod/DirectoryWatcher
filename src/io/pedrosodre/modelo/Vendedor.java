@@ -3,9 +3,9 @@ package io.pedrosodre.modelo;
 public class Vendedor {
 	
 	private String cpf;
-	private String name;
-	private double salary;
-	private double totalSales;
+	private String nome;
+	private double salario;
+	private double totalDeVendas;
 
 	public String getCpf() {
 		return cpf;
@@ -15,27 +15,27 @@ public class Vendedor {
 		this.cpf = cpf;
 	}
 
-	public String getName() {
-		return name;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
-	public double getSalary() {
-		return salary;
+	public double getSalario() {
+		return salario;
 	}
 
-	public void setSalary(double salary) {
-		this.salary = salary;
+	public void setSalario(double salario) {
+		this.salario = salario;
 	}
 
-	public double getTotalSales() {
-		return totalSales;
+	public double getTotalDeVendas() {
+		return totalDeVendas;
 	}
 
-	public void setTotalSales(double totalSales) {
-		this.totalSales = totalSales;
+	public void setTotalDeVendas(double totalDeVendas) {
+		this.totalDeVendas = totalDeVendas;
 	}
 }

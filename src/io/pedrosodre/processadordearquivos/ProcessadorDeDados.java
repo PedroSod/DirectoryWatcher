@@ -8,14 +8,14 @@ import io.pedrosodre.relatorio.RelatorioDeVendas;
 
 public final class ProcessadorDeDados {
 
-    private static final String SALE_ITEM_SEPARATOR = ",";
-    private static final String SALE_ITEM_DATA_SEPARATOR = "-";
+    private static final String SEPARADOR_ITEM_VENDA = ",";
+    private static final String SEPARADOR_DADOS_ITEM = "-";
 
     public void processarVendedor(RelatorioDeVendas resultado, String[] data) {
         Vendedor person = new Vendedor();
         person.setCpf(data[1]);
-        person.setName(data[2]);
-        person.setSalary(Double.parseDouble(data[3]));
+        person.setNome(data[2]);
+        person.setSalario(Double.parseDouble(data[3]));
         resultado.addSalesPerson(person);
     }
 
@@ -37,15 +37,15 @@ public final class ProcessadorDeDados {
         }
         Vendedor vendedor = resultado.getVendedores().get(venda.getVendedor());
         if (vendedor != null) {
-            vendedor.setTotalSales(vendedor.getTotalSales() + venda.getSaleTotal());
+            vendedor.setTotalDeVendas(vendedor.getTotalDeVendas() + venda.getSaleTotal());
         }
     }
 
     private Venda processaItemDeVenda (String[] data){
         Venda venda = new Venda();
-        String[] saleItems = data[2].substring(1, data[2].length() - 1).split(SALE_ITEM_SEPARATOR);
+        String[] saleItems = data[2].substring(1, data[2].length() - 1).split(SEPARADOR_ITEM_VENDA);
         for (String saleItemStr : saleItems) {
-            String[] itemData = saleItemStr.split(SALE_ITEM_DATA_SEPARATOR);
+            String[] itemData = saleItemStr.split(SEPARADOR_DADOS_ITEM);
             ItemVenda itemVenda = new ItemVenda();
             itemVenda.setItemId(itemData[0]);
             itemVenda.setQuantidade(Integer.parseInt(itemData[1]));

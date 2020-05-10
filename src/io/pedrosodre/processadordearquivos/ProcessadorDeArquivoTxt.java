@@ -18,11 +18,11 @@ public class ProcessadorDeArquivoTxt implements ProcessadorDeArquivo {
 
     private Path filePath;
     private ProcessadorDeDados processadorDeDados = new ProcessadorDeDados();
-    private static final String SALESPERSON = "001";
-    private static final String CLIENT = "002";
-    private static final String SALE = "003";
-    private static final String DONE_FORMAT = ".done";
-    private static final String OUTPUT_FORMAT = "Clientes: %s\nVendedores: %s\nMelhor venda: %s\nPior Vendedor: %s";
+    private static final String VENDEDOR = "001";
+    private static final String CLIENTE = "002";
+    private static final String VENDA = "003";
+    private static final String FORMATO_FINAL = ".final";
+    private static final String FORMATO_SAIDA = "Clientes: %s\nVendedores: %s\nMelhor venda: %s\nPior Vendedor: %s";
 
     public ProcessadorDeArquivoTxt(Path filePath) {
         this.filePath = filePath;
@@ -52,7 +52,7 @@ public class ProcessadorDeArquivoTxt implements ProcessadorDeArquivo {
         outputNameFile.append(System.getenv("HOMEPATH"));
         outputNameFile.append(Propriedades.get("data.diretorio.saida"));
         outputNameFile.append(filePath.getFileName().toString().substring(0, filePath.getFileName().toString().lastIndexOf('.')));
-        outputNameFile.append(DONE_FORMAT);
+        outputNameFile.append(FORMATO_FINAL);
         outputNameFile.append(filePath.getFileName().toString().substring(filePath.getFileName().toString().lastIndexOf('.')));
         return outputNameFile;
     }
@@ -63,8 +63,8 @@ public class ProcessadorDeArquivoTxt implements ProcessadorDeArquivo {
             String quantidadeDeVendedores = getQuantidadeDeVendedores(resultado);
             String melhorVenda = getMelhorVenda(resultado);
             Vendedor piorVendedor = getPiorVendedor(resultado);
-            String worstSalesPersonText = piorVendedor != null ? piorVendedor.getName() : "Nenhum";
-            writer.write(String.format(OUTPUT_FORMAT, quantidadeClientes, quantidadeDeVendedores, melhorVenda, worstSalesPersonText));
+            String worstSalesPersonText = piorVendedor != null ? piorVendedor.getNome() : "Nenhum";
+            writer.write(String.format(FORMATO_SAIDA, quantidadeClientes, quantidadeDeVendedores, melhorVenda, worstSalesPersonText));
         } catch (IOException e) {
             System.err.println(String.format("Erro na leitura do arquivo de dados %s", filePath.toString()));
         }
@@ -83,20 +83,20 @@ public class ProcessadorDeArquivoTxt implements ProcessadorDeArquivo {
     }
 
     private Vendedor getPiorVendedor(RelatorioDeVendas resultado) {
-        return resultado.getVendedores().values().stream().min(Comparator.comparing(Vendedor::getTotalSales)).orElse(null);
+        return resultado.getVendedores().values().stream().min(Comparator.comparing(Vendedor::getTotalDeVendas)).orElse(null);
     }
 
     private void processarDados(RelatorioDeVendas resultado, String dataLine) {
         String[] data = dataLine.split(Propriedades.get("data.separador.entrada"));
         if (data.length > 0) {
             switch (data[0]) {
-                case SALESPERSON:
+                case VENDEDOR:
                     processadorDeDados.processarVendedor(resultado, data);
                     break;
-                case CLIENT:
+                case CLIENTE:
                     processadorDeDados.processarCliente(resultado, data);
                     break;
-                case SALE:
+                case VENDA:
                     processadorDeDados.processarVenda(resultado, data);
                     break;
                 default:

@@ -52,7 +52,7 @@ public class RelatorioDeVendas {
 		if(vendedores == null){
 			vendedores = new HashMap<String, Vendedor>();
 		}
-		vendedores.put(person.getName(), person);
+		vendedores.put(person.getNome(), person);
 	}
 	
 	public void addClient(Cliente client){
